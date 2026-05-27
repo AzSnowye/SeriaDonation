@@ -50,7 +50,7 @@ public class Utils {
     }
 
     public static String getMinepicURL(OfflinePlayer player) {
-        String url = "https://minepic.org/avatar/";
+        String url = "https://minotar.net/avatar/";
         // Check if SkinsRestorer is enabled
         if (DependencyManager.SKINS_RESTORER_ENABLED) {
             // Get the SkinsRestorerAPI
@@ -62,7 +62,7 @@ public class Utils {
             // Code if the server doesn't use skins restorer
             url = url + (ConfigValue.USE_UUID ? player.getUniqueId().toString() : player.getName());
         }
-        return url + "/8";
+        return url + "/8.png";
     }
 
     /**
@@ -81,7 +81,7 @@ public class Utils {
             e.printStackTrace();
 
             try {
-                URL fallbackUrl = new URL("https://minotar.net/helm/Steve/100.png");
+                URL fallbackUrl = new URL("https://minotar.net/avatar/Steve/8.png");
                 image = ImageIO.read(fallbackUrl);
             } catch (IOException ex) {
                 Logger.info("Couldn't get the steve Image");

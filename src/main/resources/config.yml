@@ -7,6 +7,10 @@
 options:
   useUUID: true
 
+# Global discount setting (0 - 100).
+# Example: If you set it to 40, all prices will be automatically discounted by 40%.
+discount: 0
+
 # Configuration Explanation
 # (donationsMessage)
 #   (messageWithAvatar)
@@ -23,7 +27,7 @@ options:
 
 # You can make the donation goal always appear as a BossBar
 bossbar:
-  enabled: true # Enable this to use this feature
+  enabled: false # Enable this to use this feature
   # There are 3 Placeholder which is,
   # {current} is to show the current donation
   # {goal} is to show how much is the donation goal, you can see it at donationGoal:
@@ -32,32 +36,46 @@ bossbar:
   color: "GREEN" # Color: BLUE, GREEN, PINK, PURPLE, RED, WHITE, YELLOW
   style: "SEGMENTED_10" # Segment: SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20
 
+discordWebhook:
+  enabled: true
+  url: "https://discord.com/api/webhooks/1298586433535086602/7BmjAHM70LqJ1A6p32y8XYmhlicMEZNA7VmCncWjn25TcUQxr1JHzaGdVUiG6vKppe-I"
+  embed:
+    title: "New Donation! :tada:"
+    description: "**{player}** baru saja berdonasi!"
+    color: "#00d2ff"
+    fields:
+      - name: "Produk"
+        value: "{product_displayname}"
+        inline: true
+      - name: "Harga"
+        value: "Rp. {product_price}"
+        inline: true
+    thumbnail: "https://cdn.discordapp.com/attachments/1312840592178548876/1314314633707917312/seriagold.png?ex=6a17f0a3&is=6a169f23&hm=bb3631da0b3a3be40427a4eb62537b6cf9c077de6922d601dfa7a867fe6ae1f5&"
+
 donationsMessage:
   messageWithAvatar:
     enabled: true
     messages:
-      header: "&6&m--------------------------------------------"
-      line1: " &6» &l{player} &ejust donated!"
-      line2: " &6» Store: &7store.example.com"
-      line3: ""
-      line4: " &6&lMONTHLY GOAL &7(${goal_current_donation}/${goal_donation_goal})"
-      line5: " {goal_progress_bar} &7{goal_percentage}%"
-      line6: ""
-      line7: " &6Product: {product_displayname} &7(${product_price})"
-      line8: " &7(( Help us keep the server alive! ))"
-      footer: "&6&m--------------------------------------------"
+      header: "&#00d2ff&m--------------------------------------------"
+      line1: " &#00d2ff★ &#ffffff&l{player} &#aaaaaabaru saja berdonasi! &#00d2ff★"
+      line2: ""
+      line3: " &#00d2ff▪ &#ffffffProduk: &#00d2ff{product_displayname}"
+      line4: " &#00d2ff▪ &#ffffffHarga: &#aaaaaaRp.{product_price}"
+      line5: ""
+      line6: " &#aaaaaaTerima kasih atas dukunganmu"
+      line7: " &#aaaaaauntuk server Project Seria!"
+      line8: " &#aaaaaa(( Kunjungi &#00d2ffstore.projectseria.com &#aaaaaa))"
+      footer: "&#00d2ff&m--------------------------------------------"
   messageWithoutAvatar:
     messages:
+      - "&#00d2ff&m--------------------------------------------"
+      - " &#00d2ff★ &#ffffff&l{player} &#aaaaaabaru saja berdonasi! &#00d2ff★"
       - ""
-      - " &6» &l{player} &7just donated!"
-      - " &6» Store: &7store.example.com"
+      - " &#00d2ff▪ &#ffffffProduk: &#00d2ff{product_displayname}"
+      - " &#00d2ff▪ &#ffffffHarga: &#aaaaaa{product_price}"
       - ""
-      - " &6&lMONTHLY GOAL &7(${goal_current_donation}/${goal_donation_goal})"
-      - " {goal_progress_bar} &7{goal_percentage}%"
-      - ""
-      - " &6Product: {product_displayname} &7(${product_price})"
-      - ""
-      - " &7(( Help us keep the server alive! ))"
+      - " &#aaaaaa(( Kunjungi &#00d2ffstore.projectseria.com &#aaaaaa))"
+      - "&#00d2ff&m--------------------------------------------"
 
 
 # Configuration Explanation
@@ -94,14 +112,14 @@ events:
     - "ENTITY_PLAYER_LEVELUP;1.0;1.0"
     - "BLOCK_LAVA_POP;1.0;1.0"
   titleBar:
-    enabled: true
-    title: "&e&l{player} just donated!"
-    subTitle: "&fEveryone will receive special effects!"
+    enabled: false
+    title: "&#00d2ff&l{player} &#ffffffbaru saja berdonasi!"
+    subTitle: "&#aaaaaaSemua pemain mendapatkan efek spesial!"
     fadeIn: 20
     stay: 60
     fadeOut: 20
   command:
-    enabled: true
+    enabled: false
     commands:
       - "broadcast &aThanks {player} for the donation, everyone will receive a key!"
       - "crazycrates giveall virtual vote 5"
@@ -133,7 +151,7 @@ events:
 #       - WHITE
 #       - YELLOW
 donationGoal:
-  enabled: true
+  enabled: false
   donationGoal: 500
   progressBar:
     barLength: 15
@@ -144,14 +162,14 @@ donationGoal:
     - "broadcast &aWe have reached the donation goal!"
 
 messages:
-  noPermission: "&cYou don't have enough permissions!"
-  reload: "&aYou have reloaded the configuration"
-  invalidProduct: "&cThere is no product with that name"
-  performDonation: "&aYou have perform a donation for &e{player}"
-  reset: "&aYou have resetted the Current Donation"
+  noPermission: "&#ff5555Kamu tidak memiliki izin untuk melakukan ini!"
+  reload: "&#55ff55Konfigurasi berhasil dimuat ulang!"
+  invalidProduct: "&#ff5555Tidak ada produk dengan nama tersebut."
+  performDonation: "&#55ff55Kamu telah mengirimkan donasi atas nama &#00d2ff{player}"
+  reset: "&#55ff55Kamu telah mereset total donasi saat ini."
   help:
-    - "&e&lDonations Help &7- by aglerr"
-    - "&e- /donations help &7- send this messages"
-    - "&e- /donations reload &7- reload the configuration"
-    - "&e- /donations reset &7- reset the current donation &c(EXPERIMENTAL)"
-    - "&e- /donations send <player> <product> &7- perform a donation task in the server"
+    - "&#00d2ff&lBantuan Donasi &#aaaaaa- Project Seria"
+    - "&#00d2ff▪ /donations help &#aaaaaa- menampilkan pesan ini"
+    - "&#00d2ff▪ /donations reload &#aaaaaa- memuat ulang konfigurasi"
+    - "&#00d2ff▪ /donations reset &#aaaaaa- mereset donasi saat ini &#ff5555(EKSPERIMENTAL)"
+    - "&#00d2ff▪ /donations send <player> <product> &#aaaaaa- menjalankan aksi donasi"

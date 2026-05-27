@@ -42,12 +42,20 @@ public class MainCommand extends RoutedCommand {
                         return new ArrayList<>(DonationPlugin.getInstance().getProductManager()
                                 .getListOfProductName());
                 }))
+                .arg("amount", new StringArg())
                 .exec((commandSender, commandContext) -> {
                     // Get the product manager
                     ProductManager productManager = DonationPlugin.getInstance().getProductManager();
                     // Get all Player Variable
                     OfflinePlayer target = commandContext.get("target", OfflinePlayer.class);
                     String string = commandContext.get("product", String.class);
+                    int amount = 1;
+                    try {
+                        amount = Integer.parseInt(commandContext.get("amount", String.class));
+                    } catch (NumberFormatException e) {
+                        DonationPlugin.DEFAULT_CONFIG.sendMessage(commandSender, "messages.invalidProduct"); // Reusing for now
+                        return;
+                    }
                     // Get the product from the command argument
                     Product product = productManager.getProduct(string);
                     // Return if there is no product with that name
@@ -59,7 +67,7 @@ public class MainCommand extends RoutedCommand {
                     // First, get the queue manager
                     QueueManager queueManager = DonationPlugin.getInstance().getQueueManager();
                     // Finally, add the donation to the queue
-                    queueManager.addQueue(target, product);
+                    queueManager.addQueue(target, product, amount);
                     // Send a success message
                     DonationPlugin.DEFAULT_CONFIG.sendMessage(commandSender, "messages.performDonation", new Placeholder()
                             .add("{player}", target.getName()));

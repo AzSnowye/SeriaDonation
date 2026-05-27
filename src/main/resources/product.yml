@@ -1,13 +1,114 @@
 products:
-  vip: # The product name
-    displayName: "&aVIP Rank" # The product display name
-    price: 9.99 # The product price
+  # ========================================
+  # RANK PERMANEN
+  # ========================================
+  viscount:
+    displayName: "&#00d2ff[Rank] Viscount"
+    price: 51000
     command:
-      - "eco give {player} 100"
-      - "give {player} diamond 2"
-  vip+:
-    displayName: "&aVIP&6+ &aRank"
-    price: 15
+      - "lp user {player} parent add viscount" # Ganti command ini sesuai kebutuhan
+  count:
+    displayName: "&#00d2ff[Rank] Count"
+    price: 75000
     command:
-      - "eco give {player} 100"
-      - "give {player} diamond 2"
+      - "lp user {player} parent add count"
+  earl:
+    displayName: "&#00d2ff[Rank] Earl"
+    price: 111000
+    command:
+      - "lp user {player} parent add earl"
+  marquis:
+    displayName: "&#00d2ff[Rank] Marquis"
+    price: 231000
+    command:
+      - "lp user {player} parent add marquis"
+  duke:
+    displayName: "&#00d2ff[Rank] Duke"
+    price: 381000
+    command:
+      - "lp user {player} parent add duke"
+  saint:
+    displayName: "&#00d2ff[Rank] Saint"
+    price: 450000
+    command:
+      - "lp user {player} parent add saint"
+  prince:
+    displayName: "&#00d2ff[Rank] Prince"
+    price: 552000
+    command:
+      - "lp user {player} parent add prince"
+  king:
+    displayName: "&#00d2ff[Rank] King"
+    price: 750000
+    command:
+      - "lp user {player} parent add king"
+  divine:
+    displayName: "&#00d2ff[Rank] Divine"
+    price: 1002000
+    command:
+      - "lp user {player} parent add divine"
+
+  # ========================================
+  # UPGRADE RANK PERMANEN
+  # ========================================
+  upg_viscount_count:
+    displayName: "&#00d2ff[Upgrade] Viscount -> Count"
+    price: 26400
+    command:
+      - "lp user {player} parent add count"
+      - "lp user {player} parent remove viscount"
+  upg_count_earl:
+    displayName: "&#00d2ff[Upgrade] Count -> Earl"
+    price: 39600
+    command:
+      - "lp user {player} parent add earl"
+      - "lp user {player} parent remove count"
+  upg_earl_marquis:
+    displayName: "&#00d2ff[Upgrade] Earl -> Marquis"
+    price: 132000
+    command:
+      - "lp user {player} parent add marquis"
+      - "lp user {player} parent remove earl"
+  upg_marquis_duke:
+    displayName: "&#00d2ff[Upgrade] Marquis -> Duke"
+    price: 165000
+    command:
+      - "lp user {player} parent add duke"
+      - "lp user {player} parent remove marquis"
+  upg_duke_saint:
+    displayName: "&#00d2ff[Upgrade] Duke -> Saint"
+    price: 75900
+    command:
+      - "lp user {player} parent add saint"
+      - "lp user {player} parent remove duke"
+  upg_saint_prince:
+    displayName: "&#00d2ff[Upgrade] Saint -> Prince"
+    price: 112200
+    command:
+      - "lp user {player} parent add prince"
+      - "lp user {player} parent remove saint"
+  upg_prince_king:
+    displayName: "&#00d2ff[Upgrade] Prince -> King"
+    price: 217800
+    command:
+      - "lp user {player} parent add king"
+      - "lp user {player} parent remove prince"
+  upg_king_divine:
+    displayName: "&#00d2ff[Upgrade] King -> Divine"
+    price: 277200
+    command:
+      - "lp user {player} parent add divine"
+      - "lp user {player} parent remove king"
+
+  # ========================================
+  # SERIUM
+  # ========================================
+  serium:
+    displayName: "Serium"
+    price: 4500
+    excellentEconomy:
+      enabled: true
+      currency: "serium"
+      amount: 1
+    command:
+      - ""

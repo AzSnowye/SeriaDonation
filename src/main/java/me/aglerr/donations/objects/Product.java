@@ -1,12 +1,11 @@
 package me.aglerr.donations.objects;
 
+import me.aglerr.donations.managers.DependencyManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Product {
 
@@ -15,11 +14,20 @@ public class Product {
     private final double price;
     private final List<String> command;
 
-    public Product(String name, String displayName, double price, List<String> command) {
+    private final String excellentEconomyCurrency;
+    private final double excellentEconomyAmount;
+
+    public Product(String name, String displayName, double price, List<String> command, String excellentEconomyCurrency, double excellentEconomyAmount) {
         this.name = name;
         this.displayName = displayName;
         this.price = price;
         this.command = command;
+        this.excellentEconomyCurrency = excellentEconomyCurrency;
+        this.excellentEconomyAmount = excellentEconomyAmount;
+    }
+
+    public Product(String name, String displayName, double price, List<String> command) {
+        this(name, displayName, price, command, null, 0.0);
     }
 
     public String getName() {
@@ -31,6 +39,13 @@ public class Product {
     }
 
     public double getPrice() {
+        if (me.aglerr.donations.ConfigValue.DISCOUNT > 0 && me.aglerr.donations.ConfigValue.DISCOUNT <= 100) {
+            return price - (price * (me.aglerr.donations.ConfigValue.DISCOUNT / 100.0));
+        }
+        return price;
+    }
+
+    public double getOriginalPrice() {
         return price;
     }
 
@@ -38,10 +53,41 @@ public class Product {
         return command;
     }
 
-    public void execute(OfflinePlayer player) {
-        for (String command : this.command) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
-                    .replace("{player}", player.getName()));
+    public String getExcellentEconomyCurrency() {
+        return excellentEconomyCurrency;
+    }
+
+    public double getExcellentEconomyAmount() {
+        return excellentEconomyAmount;
+    }
+
+    public void execute(OfflinePlayer player, int amount) {
+        if (this.command != null) {
+            for (String cmd : this.command) {
+                if (cmd == null || cmd.trim().isEmpty()) continue;
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd
+                        .replace("{player}", player.getName() == null ? "" : player.getName())
+                        .replace("{amount}", String.valueOf(amount)));
+            }
         }
+
+        if (DependencyManager.EXCELLENT_ECONOMY_ENABLED && excellentEconomyCurrency != null && !excellentEconomyCurrency.isEmpty()) {
+            Plugin plugin = Bukkit.getPluginManager().getPlugin("ExcellentEconomy");
+            if (plugin != null) {
+                try {
+                    Object api = plugin.getClass().getMethod("getAPI").invoke(plugin);
+                    if (api != null) {
+                        java.lang.reflect.Method depositMethod = api.getClass().getMethod("depositAsync", java.util.UUID.class, String.class, double.class);
+                        depositMethod.invoke(api, player.getUniqueId(), excellentEconomyCurrency, excellentEconomyAmount * amount);
+                    }
+                } catch (Exception e) {
+                    Bukkit.getLogger().warning("Failed to deposit ExcellentEconomy currency: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    public void execute(OfflinePlayer player) {
+        execute(player, 1);
     }
 }

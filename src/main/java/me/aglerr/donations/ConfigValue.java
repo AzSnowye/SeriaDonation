@@ -53,9 +53,12 @@ public class ConfigValue {
     public static String PERFORM_DONATION;
     public static List<String> HELP_MESSAGES;
 
+    public static double DISCOUNT = 0;
+
     public static void initialize() {
         FileConfiguration config = DonationPlugin.DEFAULT_CONFIG.getConfig();
         USE_UUID = config.getBoolean("options.useUUID");
+        DISCOUNT = config.getDouble("discount", 0.0);
         BROADCAST_AVATAR_ENABLED = config.getBoolean("donationsMessage.messageWithAvatar.enabled");
         HEADER = config.getString("donationsMessage.messageWithAvatar.messages.header");
         LINE_1 = config.getString("donationsMessage.messageWithAvatar.messages.line1");
@@ -110,41 +113,51 @@ public class ConfigValue {
 
     public static String[] donationAvatar(QueueDonation donation) {
         return new String[]{
-                finalParse(LINE_1, donation.getPlayer(), donation.getProduct()),
-                finalParse(LINE_2, donation.getPlayer(), donation.getProduct()),
-                finalParse(LINE_3, donation.getPlayer(), donation.getProduct()),
-                finalParse(LINE_4, donation.getPlayer(), donation.getProduct()),
-                finalParse(LINE_5, donation.getPlayer(), donation.getProduct()),
-                finalParse(LINE_6, donation.getPlayer(), donation.getProduct()),
-                finalParse(LINE_7, donation.getPlayer(), donation.getProduct()),
-                finalParse(LINE_8, donation.getPlayer(), donation.getProduct())
+                finalParse(LINE_1, donation),
+                finalParse(LINE_2, donation),
+                finalParse(LINE_3, donation),
+                finalParse(LINE_4, donation),
+                finalParse(LINE_5, donation),
+                finalParse(LINE_6, donation),
+                finalParse(LINE_7, donation),
+                finalParse(LINE_8, donation)
         };
     }
 
     public static List<String> donationNoAvatar(QueueDonation donation){
         List<String> messages = new ArrayList<>();
         BROADCAST_NO_AVATAR.forEach(message ->
-                messages.add(finalParse(message, donation.getPlayer(), donation.getProduct())));
+                messages.add(finalParse(message, donation)));
         return messages;
     }
 
-    private static String finalParse(String string, OfflinePlayer player, Product product){
+    private static String finalParse(String string, QueueDonation donation){
         if (!DependencyManager.PLACEHOLDER_API_ENABLED) {
-            return Common.color(parseProduct(string, player, product));
+            return Common.color(parseProduct(string, donation));
         }
-        return Common.color(placeholderAPI(string, player, product));
+        return Common.color(placeholderAPI(string, donation));
     }
 
-    private static String placeholderAPI(String string, OfflinePlayer player, Product product){
-        return PlaceholderAPI.setPlaceholders(player, parseProduct(string, player, product));
+    private static String placeholderAPI(String string, QueueDonation donation){
+        return PlaceholderAPI.setPlaceholders(donation.getPlayer(), parseProduct(string, donation));
     }
 
-    private static String parseProduct(String string, OfflinePlayer player, Product product) {
+    private static String parseProduct(String string, QueueDonation donation) {
+        Product product = donation.getProduct();
+        int amount = donation.getAmount();
+        double totalPrice = product.getPrice() * amount;
+        double totalOriginalPrice = product.getOriginalPrice() * amount;
+
+        String formattedPrice = java.text.NumberFormat.getInstance(new java.util.Locale("id", "ID")).format(totalPrice);
+        String formattedOriginalPrice = java.text.NumberFormat.getInstance(new java.util.Locale("id", "ID")).format(totalOriginalPrice);
+
         return string
                 .replace("{product_name}", product.getName())
                 .replace("{product_displayname}", product.getDisplayName())
-                .replace("{product_price}", product.getPrice() + "")
-                .replace("{player}", player.getName())
+                .replace("{product_price}", formattedPrice)
+                .replace("{product_original_price}", formattedOriginalPrice)
+                .replace("{amount}", amount + "")
+                .replace("{player}", donation.getPlayer().getName())
                 .replace("{goal_progress_bar}", DonationGoal.getProgressBar())
                 .replace("{goal_percentage}", DonationGoal.getDonationPercentage())
                 .replace("{goal_donation_goal}", DonationGoal.getDonationGoal())

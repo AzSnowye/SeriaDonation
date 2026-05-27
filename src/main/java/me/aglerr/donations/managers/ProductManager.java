@@ -80,8 +80,24 @@ public class ProductManager {
             errors.add(basePath + ".price must be a number (got " + rawPrice.getClass().getSimpleName() + ")");
         }
 
+        String excellentEconomyCurrency = null;
+        double excellentEconomyAmount = 0.0;
+        boolean hasExcellentEconomy = false;
+        
+        if (section.contains("excellentEconomy")) {
+            ConfigurationSection ecoSection = section.getConfigurationSection("excellentEconomy");
+            if (ecoSection != null && ecoSection.getBoolean("enabled", false)) {
+                hasExcellentEconomy = true;
+                excellentEconomyCurrency = ecoSection.getString("currency", null);
+                excellentEconomyAmount = ecoSection.getDouble("amount", 0.0);
+                if (excellentEconomyCurrency == null || excellentEconomyCurrency.isBlank()) {
+                    errors.add(basePath + ".excellentEconomy.currency is missing or empty");
+                }
+            }
+        }
+
         List<String> commandList = section.getStringList("command");
-        if (commandList == null || commandList.isEmpty()) {
+        if ((commandList == null || commandList.isEmpty()) && !hasExcellentEconomy) {
             errors.add(basePath + ".command is missing or empty (must be a list of commands)");
         }
 
@@ -95,7 +111,7 @@ public class ProductManager {
         }
 
         // Safe to load now
-        Product product = new Product(id, displayName, price, commandList);
+        Product product = new Product(id, displayName, price, commandList, excellentEconomyCurrency, excellentEconomyAmount);
         this.productList.put(id, product);
         Logger.info("Successfully loaded '" + id + "'");
     }

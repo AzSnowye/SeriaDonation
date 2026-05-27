@@ -11,10 +11,16 @@ public class QueueDonation {
 
     @NotNull private final OfflinePlayer player;
     @NotNull private final Product product;
+    private final int amount;
 
-    public QueueDonation(@NotNull OfflinePlayer player, @NotNull Product product) {
+    public QueueDonation(@NotNull OfflinePlayer player, @NotNull Product product, int amount) {
         this.player = player;
         this.product = product;
+        this.amount = amount;
+    }
+
+    public QueueDonation(@NotNull OfflinePlayer player, @NotNull Product product) {
+        this(player, product, 1);
     }
 
     @NotNull
@@ -27,9 +33,16 @@ public class QueueDonation {
         return product;
     }
 
+    public int getAmount() {
+        return amount;
+    }
+
     public void announceDonation(){
         Executor.sync(() -> Events.playAllEvents(this.getPlayer()));
-        Executor.sync(() -> DonationGoal.handleDonation(this.getProduct()));
-        Executor.async(() -> Utils.broadcastDonation(this));
+        Executor.sync(() -> DonationGoal.handleDonation(this));
+        Executor.async(() -> {
+            Utils.broadcastDonation(this);
+            DiscordWebhook.sendDonation(this);
+        });
     }
 }

@@ -5,6 +5,7 @@ import com.muhammaddaffa.mdlib.utils.Config;
 import me.aglerr.donations.ConfigValue;
 import me.aglerr.donations.DonationPlugin;
 import me.aglerr.donations.objects.Product;
+import me.aglerr.donations.objects.QueueDonation;
 import me.aglerr.donations.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,9 +29,10 @@ public class DonationGoal {
         return Common.digits(((currentDonation / donationGoal) * 100));
     }
 
-    public static void handleDonation(Product product){
+    public static void handleDonation(QueueDonation donation){
+        Product product = donation.getProduct();
         // Update the current donation goal first
-        currentDonation += product.getPrice();
+        currentDonation += product.getPrice() * donation.getAmount();
         // Check if we have reached the donation goal
         if(currentDonation >= donationGoal){
             // Reset the donation goal

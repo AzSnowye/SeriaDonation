@@ -47,19 +47,15 @@ public class ImageMessageHex {
     }
 
     private BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
+        if (originalImage.getWidth() == width && originalImage.getHeight() == height) {
+            return originalImage;
+        }
         Image scaled = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = resized.createGraphics();
         g2d.drawImage(scaled, 0, 0, null);
         g2d.dispose();
         return resized;
-        /*AffineTransform af = new AffineTransform();
-        af.scale(
-                width / (double) originalImage.getWidth(),
-                height / (double) originalImage.getHeight());
-
-        AffineTransformOp operation = new AffineTransformOp(af, Image.SCALE_SMOOTH);
-        return operation.filter(originalImage, null);*/
     }
 
     private String[] toImgMessage(Color[][] colors, char imgchar) {
@@ -71,14 +67,19 @@ public class ImageMessageHex {
                 Color color = colors[x][y];
                 // convert to minedown-styled color string
                 if (color != null) {
-                    line.append("&#")
-                            .append(colorToHex(color))
+                    line.append("§x")
+                            .append("§").append(String.format("%x", color.getRed() >> 4))
+                            .append("§").append(String.format("%x", color.getRed() & 0xF))
+                            .append("§").append(String.format("%x", color.getGreen() >> 4))
+                            .append("§").append(String.format("%x", color.getGreen() & 0xF))
+                            .append("§").append(String.format("%x", color.getBlue() >> 4))
+                            .append("§").append(String.format("%x", color.getBlue() & 0xF))
                             .append(imgchar);
                 } else {
                     line.append(TRANSPARENT_CHAR);
                 }
             }
-            lines[y] = Common.color(line.toString()) + ChatColor.RESET;
+            lines[y] = line.toString() + ChatColor.RESET;
         }
 
         return lines;

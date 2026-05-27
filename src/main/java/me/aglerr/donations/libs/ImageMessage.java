@@ -100,6 +100,9 @@ public class ImageMessage {
     }
 
     private BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
+        if (originalImage.getWidth() == width && originalImage.getHeight() == height) {
+            return originalImage;
+        }
         AffineTransform af = new AffineTransform();
         af.scale(
                 width / (double) originalImage.getWidth(),

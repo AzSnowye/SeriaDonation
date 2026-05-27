@@ -1,4 +1,4 @@
-name: AvatarDonation
+name: SeriaDonation
 version: '${project.version}'
 api-version: 1.13
 authors: [aglerr, starfruit2210]

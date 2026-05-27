@@ -8,12 +8,14 @@ public class DependencyManager {
 
     public static boolean SKINS_RESTORER_ENABLED = false;
     public static boolean PLACEHOLDER_API_ENABLED = false;
+    public static boolean EXCELLENT_ECONOMY_ENABLED = false;
 
     public static void checkDependencies(){
         PluginManager pm = Bukkit.getPluginManager();
 
         SKINS_RESTORER_ENABLED = pm.getPlugin("SkinsRestorer") != null;
         PLACEHOLDER_API_ENABLED = pm.getPlugin("PlaceholderAPI") != null;
+        EXCELLENT_ECONOMY_ENABLED = pm.getPlugin("ExcellentEconomy") != null;
 
         hookPlaceholderAPI();
     }

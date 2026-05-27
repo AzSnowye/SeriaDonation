@@ -21,10 +21,14 @@ public class QueueManager {
 
     private final List<QueueDonation> queueDonations = new ArrayList<>();
 
-    public void addQueue(OfflinePlayer player, @NotNull Product product){
-        this.queueDonations.add(new QueueDonation(player, product));
+    public void addQueue(OfflinePlayer player, @NotNull Product product, int amount){
+        this.queueDonations.add(new QueueDonation(player, product, amount));
 
-        product.execute(player);
+        product.execute(player, amount);
+    }
+
+    public void addQueue(OfflinePlayer player, @NotNull Product product){
+        addQueue(player, product, 1);
     }
 
     public void addQueue(QueueDonation donation){
