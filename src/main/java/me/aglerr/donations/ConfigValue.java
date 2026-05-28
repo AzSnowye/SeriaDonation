@@ -1,10 +1,10 @@
 package me.aglerr.donations;
 
-import com.muhammaddaffa.mdlib.utils.Common;
 import me.aglerr.donations.managers.DependencyManager;
 import me.aglerr.donations.managers.DonationGoal;
 import me.aglerr.donations.objects.Product;
 import me.aglerr.donations.objects.QueueDonation;
+import me.aglerr.donations.utils.color.ColorParser;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -112,7 +112,7 @@ public class ConfigValue {
     }
 
     public static String[] donationAvatar(QueueDonation donation) {
-        return new String[]{
+        return new String[] {
                 finalParse(LINE_1, donation),
                 finalParse(LINE_2, donation),
                 finalParse(LINE_3, donation),
@@ -124,21 +124,20 @@ public class ConfigValue {
         };
     }
 
-    public static List<String> donationNoAvatar(QueueDonation donation){
+    public static List<String> donationNoAvatar(QueueDonation donation) {
         List<String> messages = new ArrayList<>();
-        BROADCAST_NO_AVATAR.forEach(message ->
-                messages.add(finalParse(message, donation)));
+        BROADCAST_NO_AVATAR.forEach(message -> messages.add(finalParse(message, donation)));
         return messages;
     }
 
-    private static String finalParse(String string, QueueDonation donation){
+    private static String finalParse(String string, QueueDonation donation) {
         if (!DependencyManager.PLACEHOLDER_API_ENABLED) {
-            return Common.color(parseProduct(string, donation));
+            return ColorParser.color(parseProduct(string, donation));
         }
-        return Common.color(placeholderAPI(string, donation));
+        return ColorParser.color(placeholderAPI(string, donation));
     }
 
-    private static String placeholderAPI(String string, QueueDonation donation){
+    private static String placeholderAPI(String string, QueueDonation donation) {
         return PlaceholderAPI.setPlaceholders(donation.getPlayer(), parseProduct(string, donation));
     }
 
@@ -149,7 +148,8 @@ public class ConfigValue {
         double totalOriginalPrice = product.getOriginalPrice() * amount;
 
         String formattedPrice = java.text.NumberFormat.getInstance(new java.util.Locale("id", "ID")).format(totalPrice);
-        String formattedOriginalPrice = java.text.NumberFormat.getInstance(new java.util.Locale("id", "ID")).format(totalOriginalPrice);
+        String formattedOriginalPrice = java.text.NumberFormat.getInstance(new java.util.Locale("id", "ID"))
+                .format(totalOriginalPrice);
 
         return string
                 .replace("{product_name}", product.getName())

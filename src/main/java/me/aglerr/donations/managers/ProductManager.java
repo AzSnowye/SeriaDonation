@@ -110,8 +110,10 @@ public class ProductManager {
             return;
         }
 
+        boolean discountable = section.getBoolean("discount", true);
+
         // Safe to load now
-        Product product = new Product(id, displayName, price, commandList, excellentEconomyCurrency, excellentEconomyAmount);
+        Product product = new Product(id, displayName, price, discountable, commandList, excellentEconomyCurrency, excellentEconomyAmount);
         this.productList.put(id, product);
         Logger.info("Successfully loaded '" + id + "'");
     }

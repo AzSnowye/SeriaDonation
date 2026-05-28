@@ -27,7 +27,7 @@ import java.util.Optional;
 public class Utils {
 
     public static String[] getStartupLogo() {
-        return new String[]{
+        return new String[] {
                 "  _______ _             ____        _       ",
                 " |__   __| |           / __ \\      | |      ",
                 "    | |  | |__   ___  | |  | |_ __ | |_   _ ",
@@ -49,36 +49,48 @@ public class Utils {
         }
     }
 
-    public static String getMinepicURL(OfflinePlayer player) {
-        String url = "https://minotar.net/avatar/";
-        // Check if SkinsRestorer is enabled
+    public static BufferedImage getPlayerAvatar(OfflinePlayer player) {
         if (DependencyManager.SKINS_RESTORER_ENABLED) {
-            // Get the SkinsRestorerAPI
-            SkinsRestorer api = DonationPlugin.getSkinsApi();
-            Optional<SkinIdentifier> optional = api.getPlayerStorage().getSkinIdOfPlayer(player.getUniqueId());
-            // If the player is wearing skin, get the skin name
-            url = url + (optional.isPresent() ? optional.get().getIdentifier() : player.getName());
-        } else {
-            // Code if the server doesn't use skins restorer
-            url = url + (ConfigValue.USE_UUID ? player.getUniqueId().toString() : player.getName());
+            try {
+                SkinsRestorer api = DonationPlugin.getSkinsApi();
+                Optional<net.skinsrestorer.api.property.SkinProperty> propertyOpt = api.getPlayerStorage().getSkinForPlayer(player.getUniqueId(), player.getName());
+                if (propertyOpt.isPresent()) {
+                    String value = propertyOpt.get().getValue();
+                    String decoded = new String(java.util.Base64.getDecoder().decode(value));
+                    com.google.gson.JsonObject json = new com.google.gson.JsonParser().parse(decoded).getAsJsonObject();
+                    String skinUrl = json.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+                    
+                    BufferedImage skin = ImageIO.read(new URL(skinUrl));
+                    BufferedImage avatar = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
+                    java.awt.Graphics2D g2d = avatar.createGraphics();
+                    g2d.drawImage(skin.getSubimage(8, 8, 8, 8), 0, 0, null);
+                    // Overlay hat layer (which is at 40, 8)
+                    BufferedImage hat = skin.getSubimage(40, 8, 8, 8);
+                    g2d.drawImage(hat, 0, 0, null);
+                    g2d.dispose();
+                    return avatar;
+                }
+            } catch (Exception e) {
+                Logger.info("Couldn't fetch skin from SkinsRestorer, falling back to Minotar...");
+            }
         }
-        return url + "/8.png";
+        
+        try {
+            String url = "https://minotar.net/helm/" + (ConfigValue.USE_UUID ? player.getUniqueId().toString() : player.getName()) + "/8.png";
+            return ImageIO.read(new URL(url));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
      * Note: this method should be run in async
      */
     public static void broadcastDonation(QueueDonation donation) {
-        BufferedImage image = null;
+        BufferedImage image = getPlayerAvatar(donation.getPlayer());
 
-        try {
-            // Get the URL
-            URL url = new URL(getMinepicURL(donation.getPlayer()));
-            // Get the buffered image from the url
-            image = ImageIO.read(url);
-        } catch (IOException e) {
+        if (image == null) {
             Logger.info("Couldn't get player Image");
-            e.printStackTrace();
 
             try {
                 URL fallbackUrl = new URL("https://minotar.net/avatar/Steve/8.png");
@@ -91,9 +103,9 @@ public class Utils {
 
         }
         // Check if broadcast avatar is enabled
-        if(ConfigValue.BROADCAST_AVATAR_ENABLED){
+        if (ConfigValue.BROADCAST_AVATAR_ENABLED) {
             // Check if hex color is enabled
-            if(DonationPlugin.HEX_AVAILABLE){
+            if (DonationPlugin.HEX_AVAILABLE) {
                 // Create an image message with hex color
                 ImageMessageHex imageMessageHex = new ImageMessageHex(image, 8, ImageChar.BLOCK.getChar())
                         // Append the additional text
@@ -109,32 +121,32 @@ public class Utils {
                 imageMessage.sendToPlayers();
             }
         } else {
-            //---------------------------------------------
+            // ---------------------------------------------
             // Code when avatar message is disabled
-            //---------------------------------------------
+            // ---------------------------------------------
             // Check if the hex color is enabled
-            if(DonationPlugin.HEX_AVAILABLE){
+            if (DonationPlugin.HEX_AVAILABLE) {
                 // First, loop through all online players
                 Bukkit.getOnlinePlayers().forEach(player ->
-                        // Now, loop through all the messages
-                        ConfigValue.donationNoAvatar(donation).forEach(message ->
-                                // Finally send the messages
-                                player.spigot().sendMessage(new TextComponent(Common.color(message)))));
+                // Now, loop through all the messages
+                ConfigValue.donationNoAvatar(donation).forEach(message ->
+                // Finally send the messages
+                player.spigot().sendMessage(new TextComponent(Common.color(message)))));
             } else {
                 // Broadcast the message without hex color and not centered
-                ConfigValue.donationNoAvatar(donation).forEach(message ->
-                        Bukkit.broadcastMessage(Common.color(message)));
+                ConfigValue.donationNoAvatar(donation)
+                        .forEach(message -> Bukkit.broadcastMessage(Common.color(message)));
             }
         }
     }
 
-    public static String getProgressBar(int current, int max, int totalBars, char symbol, String completedColor, String notCompletedColor){
-        float percent = (float) current/max;
+    public static String getProgressBar(int current, int max, int totalBars, char symbol, String completedColor,
+            String notCompletedColor) {
+        float percent = (float) current / max;
         int progressBars = (int) (totalBars * percent);
 
         return Strings.repeat(Common.color(completedColor) + symbol, progressBars) +
                 Strings.repeat(Common.color(notCompletedColor) + symbol, totalBars - progressBars);
     }
-
 
 }

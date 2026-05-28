@@ -4,108 +4,193 @@ products:
   # ========================================
   viscount:
     displayName: "&#00d2ff[Rank] Viscount"
-    price: 51000
+    price: 85000
+    discount: true
     command:
       - "lp user {player} parent add viscount" # Ganti command ini sesuai kebutuhan
+      - "serium give {player} 2"
   count:
     displayName: "&#00d2ff[Rank] Count"
-    price: 75000
+    price: 125000
+    discount: true
     command:
       - "lp user {player} parent add count"
+      - "serium give {player} 4"
   earl:
     displayName: "&#00d2ff[Rank] Earl"
-    price: 111000
+    price: 185000
+    discount: true
     command:
       - "lp user {player} parent add earl"
+      - "serium give {player} 6"
   marquis:
     displayName: "&#00d2ff[Rank] Marquis"
-    price: 231000
+    price: 385000
+    discount: true
     command:
       - "lp user {player} parent add marquis"
+      - "serium give {player} 9"
   duke:
     displayName: "&#00d2ff[Rank] Duke"
-    price: 381000
+    price: 635000
+    discount: true
     command:
       - "lp user {player} parent add duke"
+      - "serium give {player} 15"
   saint:
     displayName: "&#00d2ff[Rank] Saint"
-    price: 450000
+    price: 750000
+    discount: true
     command:
       - "lp user {player} parent add saint"
+      - "serium give {player} 18"
   prince:
     displayName: "&#00d2ff[Rank] Prince"
-    price: 552000
+    price: 920000
+    discount: true
     command:
       - "lp user {player} parent add prince"
+      - "serium give {player} 22"
   king:
     displayName: "&#00d2ff[Rank] King"
-    price: 750000
+    price: 1250000
+    discount: true
     command:
       - "lp user {player} parent add king"
+      - "serium give {player} 30"
   divine:
     displayName: "&#00d2ff[Rank] Divine"
-    price: 1002000
+    price: 1670000
+    discount: true
     command:
       - "lp user {player} parent add divine"
+      - "serium give {player} 45"
 
   # ========================================
   # UPGRADE RANK PERMANEN
   # ========================================
   upg_viscount_count:
     displayName: "&#00d2ff[Upgrade] Viscount -> Count"
-    price: 26400
+    price: 44000
+    discount: true
     command:
       - "lp user {player} parent add count"
       - "lp user {player} parent remove viscount"
   upg_count_earl:
     displayName: "&#00d2ff[Upgrade] Count -> Earl"
-    price: 39600
+    price: 66000
+    discount: true
     command:
       - "lp user {player} parent add earl"
       - "lp user {player} parent remove count"
   upg_earl_marquis:
     displayName: "&#00d2ff[Upgrade] Earl -> Marquis"
-    price: 132000
+    price: 220000
+    discount: true
     command:
       - "lp user {player} parent add marquis"
       - "lp user {player} parent remove earl"
   upg_marquis_duke:
     displayName: "&#00d2ff[Upgrade] Marquis -> Duke"
-    price: 165000
+    price: 275000
+    discount: true
     command:
       - "lp user {player} parent add duke"
       - "lp user {player} parent remove marquis"
   upg_duke_saint:
     displayName: "&#00d2ff[Upgrade] Duke -> Saint"
-    price: 75900
+    price: 126500
+    discount: true
     command:
       - "lp user {player} parent add saint"
       - "lp user {player} parent remove duke"
   upg_saint_prince:
     displayName: "&#00d2ff[Upgrade] Saint -> Prince"
-    price: 112200
+    price: 187000
+    discount: true
     command:
       - "lp user {player} parent add prince"
       - "lp user {player} parent remove saint"
   upg_prince_king:
     displayName: "&#00d2ff[Upgrade] Prince -> King"
-    price: 217800
+    price: 363000
+    discount: true
     command:
       - "lp user {player} parent add king"
       - "lp user {player} parent remove prince"
   upg_king_divine:
     displayName: "&#00d2ff[Upgrade] King -> Divine"
-    price: 277200
+    price: 462000
+    discount: true
     command:
       - "lp user {player} parent add divine"
       - "lp user {player} parent remove king"
+
+  # ========================================
+  # RANK BULANAN (MONTHLY)
+  # ========================================
+  monthly_viscount:
+    displayName: "&#00d2ff[Rank Bulanan] Viscount"
+    price: 17000
+    discount: false
+    command:
+      - "lp user {player} parent addtemp viscount 30d"
+  monthly_count:
+    displayName: "&#00d2ff[Rank Bulanan] Count"
+    price: 30000
+    discount: false
+    command:
+      - "lp user {player} parent addtemp count 30d"
+  monthly_earl:
+    displayName: "&#00d2ff[Rank Bulanan] Earl"
+    price: 42000
+    discount: false
+    command:
+      - "lp user {player} parent addtemp earl 30d"
+  monthly_marquis:
+    displayName: "&#00d2ff[Rank Bulanan] Marquis"
+    price: 84000
+    discount: false
+    command:
+      - "lp user {player} parent addtemp marquis 30d"
+  monthly_duke:
+    displayName: "&#00d2ff[Rank Bulanan] Duke"
+    price: 125000
+    discount: false
+    command:
+      - "lp user {player} parent addtemp duke 30d"
+  monthly_saint:
+    displayName: "&#00d2ff[Rank Bulanan] Saint"
+    price: 150000
+    discount: false
+    command:
+      - "lp user {player} parent addtemp saint 30d"
+  monthly_prince:
+    displayName: "&#00d2ff[Rank Bulanan] Prince"
+    price: 185000
+    discount: false
+    command:
+      - "lp user {player} parent addtemp prince 30d"
+  monthly_king:
+    displayName: "&#00d2ff[Rank Bulanan] King"
+    price: 300000
+    discount: false
+    command:
+      - "lp user {player} parent addtemp king 30d"
+  monthly_divine:
+    displayName: "&#00d2ff[Rank Bulanan] Divine"
+    price: 400000
+    discount: false
+    command:
+      - "lp user {player} parent addtemp divine 30d"
 
   # ========================================
   # SERIUM
   # ========================================
   serium:
     displayName: "Serium"
-    price: 4500
+    price: 7500
+    discount: true
     excellentEconomy:
       enabled: true
       currency: "serium"

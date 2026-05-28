@@ -38,7 +38,7 @@ bossbar:
 
 discordWebhook:
   enabled: true
-  url: "https://discord.com/api/webhooks/1298586433535086602/7BmjAHM70LqJ1A6p32y8XYmhlicMEZNA7VmCncWjn25TcUQxr1JHzaGdVUiG6vKppe-I"
+  url: "https://discord.com/api/webhooks/"
   embed:
     title: "New Donation! :tada:"
     description: "**{player}** baru saja berdonasi!"

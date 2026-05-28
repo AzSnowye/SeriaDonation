@@ -1,6 +1,7 @@
 package me.aglerr.donations.commands;
 
 import com.muhammaddaffa.mdlib.commands.args.ArgSuggester;
+import com.muhammaddaffa.mdlib.commands.args.OptionalArg;
 import com.muhammaddaffa.mdlib.commands.args.builtin.OfflinePlayerArg;
 import com.muhammaddaffa.mdlib.commands.args.builtin.StringArg;
 import com.muhammaddaffa.mdlib.commands.commands.RoutedCommand;
@@ -42,19 +43,22 @@ public class MainCommand extends RoutedCommand {
                         return new ArrayList<>(DonationPlugin.getInstance().getProductManager()
                                 .getListOfProductName());
                 }))
-                .arg("amount", new StringArg())
+                .arg("amount", OptionalArg.of(new StringArg()))
                 .exec((commandSender, commandContext) -> {
                     // Get the product manager
                     ProductManager productManager = DonationPlugin.getInstance().getProductManager();
                     // Get all Player Variable
                     OfflinePlayer target = commandContext.get("target", OfflinePlayer.class);
                     String string = commandContext.get("product", String.class);
+                    String amountStr = commandContext.get("amount", String.class);
                     int amount = 1;
-                    try {
-                        amount = Integer.parseInt(commandContext.get("amount", String.class));
-                    } catch (NumberFormatException e) {
-                        DonationPlugin.DEFAULT_CONFIG.sendMessage(commandSender, "messages.invalidProduct"); // Reusing for now
-                        return;
+                    if (amountStr != null) {
+                        try {
+                            amount = Integer.parseInt(amountStr);
+                        } catch (NumberFormatException e) {
+                            DonationPlugin.DEFAULT_CONFIG.sendMessage(commandSender, "messages.invalidProduct"); // Reusing for now
+                            return;
+                        }
                     }
                     // Get the product from the command argument
                     Product product = productManager.getProduct(string);

@@ -59,6 +59,8 @@ public class QueueManager {
             IS_QUEUEING = true;
             // Announce the donation message
             donation.announceDonation();
+            // Send to BungeeCord for cross-server broadcast
+            me.aglerr.donations.DonationPlugin.getInstance().getBungeeSync().sendBroadcast(donation);
             // Remove the donation from the list
             this.queueDonations.remove(donation);
             // Set the is queueing back to false

@@ -5,6 +5,7 @@ import com.muhammaddaffa.mdlib.utils.Config;
 import me.aglerr.donations.commands.MainCommand;
 import me.aglerr.donations.managers.*;
 import me.aglerr.donations.metrics.Metrics;
+import me.aglerr.donations.utils.BungeeSync;
 import me.aglerr.donations.utils.Utils;
 import net.skinsrestorer.api.SkinsRestorer;
 import net.skinsrestorer.api.SkinsRestorerProvider;
@@ -19,6 +20,7 @@ public class DonationPlugin extends JavaPlugin {
 
     private final ProductManager productManager = new ProductManager();
     private QueueManager queueManager;
+    private BungeeSync bungeeSync;
 
     private static DonationPlugin instance;
 
@@ -53,6 +55,11 @@ public class DonationPlugin extends JavaPlugin {
                 Bukkit.getVersion().contains("1.19") ||
                 Bukkit.getVersion().contains("1.20") ||
                 Bukkit.getVersion().contains("1.21");
+
+        // Initialize BungeeSync
+        bungeeSync = new BungeeSync(this);
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", bungeeSync);
     }
 
     @Override
@@ -110,5 +117,9 @@ public class DonationPlugin extends JavaPlugin {
 
     public QueueManager getQueueManager() {
         return queueManager;
+    }
+
+    public BungeeSync getBungeeSync() {
+        return bungeeSync;
     }
 }

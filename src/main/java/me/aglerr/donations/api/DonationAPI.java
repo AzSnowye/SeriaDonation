@@ -61,7 +61,7 @@ public class DonationAPI {
         // Get the product manager
         ProductManager productManager = DonationPlugin.getInstance().getProductManager();
         // Create the product object
-        Product product = new Product(name, displayName, price, command);
+        Product product = new Product(name, displayName, price, true, command);
         // Add product to the list
         productManager.addProduct(name, product);
         // Should we save the product to the configuration?

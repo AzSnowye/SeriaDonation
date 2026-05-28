@@ -12,22 +12,24 @@ public class Product {
     private final String name;
     private final String displayName;
     private final double price;
+    private final boolean discountable;
     private final List<String> command;
 
     private final String excellentEconomyCurrency;
     private final double excellentEconomyAmount;
 
-    public Product(String name, String displayName, double price, List<String> command, String excellentEconomyCurrency, double excellentEconomyAmount) {
+    public Product(String name, String displayName, double price, boolean discountable, List<String> command, String excellentEconomyCurrency, double excellentEconomyAmount) {
         this.name = name;
         this.displayName = displayName;
         this.price = price;
+        this.discountable = discountable;
         this.command = command;
         this.excellentEconomyCurrency = excellentEconomyCurrency;
         this.excellentEconomyAmount = excellentEconomyAmount;
     }
 
-    public Product(String name, String displayName, double price, List<String> command) {
-        this(name, displayName, price, command, null, 0.0);
+    public Product(String name, String displayName, double price, boolean discountable, List<String> command) {
+        this(name, displayName, price, discountable, command, null, 0.0);
     }
 
     public String getName() {
@@ -39,7 +41,7 @@ public class Product {
     }
 
     public double getPrice() {
-        if (me.aglerr.donations.ConfigValue.DISCOUNT > 0 && me.aglerr.donations.ConfigValue.DISCOUNT <= 100) {
+        if (this.discountable && me.aglerr.donations.ConfigValue.DISCOUNT > 0 && me.aglerr.donations.ConfigValue.DISCOUNT <= 100) {
             return price - (price * (me.aglerr.donations.ConfigValue.DISCOUNT / 100.0));
         }
         return price;
